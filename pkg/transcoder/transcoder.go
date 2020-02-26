@@ -53,13 +53,30 @@ func transcodeFile(path, destination string) (trans *transcoder.Transcoder, err 
 	return
 }
 
-func getAudioStream(tf *transcoder.Transcoder) *models.Streams {
+// GetAudioStream get first Audio stream
+func GetAudioStream(tf *transcoder.Transcoder) *models.Streams {
 	for _, s := range tf.MediaFile().Metadata().Streams {
 		if s.CodecType == "audio" {
 			return &s
 		}
 	}
 	return nil
+}
+
+// DurationInParts get duration as xx:xx:xx
+func DurationInParts(d float64) string {
+	s := int(d)
+	hours := 0
+	minutes := s / 60
+	seconds := s % 60
+	if minutes > 60 {
+		hours = minutes / 60
+		minutes = minutes % 60
+	}
+	if hours > 0 {
+		return fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+	}
+	return fmt.Sprintf("%02d:%02d", minutes, seconds)
 }
 
 // PreviewAudioFile creates a preview of an audio file
@@ -78,7 +95,7 @@ func PreviewAudioFile(start, end int, contentPath, destinationPath string, image
 	if err != nil {
 		return nil, err
 	}
-	s := getAudioStream(tf)
+	s := GetAudioStream(tf)
 	duration, err := strconv.Atoi(strings.Split(s.Duration, ".")[0])
 	if err != nil {
 		return nil, err

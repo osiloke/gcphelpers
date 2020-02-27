@@ -121,7 +121,7 @@ func TestPreviewAudioFile(t *testing.T) {
 				return
 			}
 			<-got.Run(false)
-			stream := getAudioStream(got)
+			stream := GetAudioStream(got)
 			want := tt.args.end - tt.args.start
 			gotDuration, _ := strconv.ParseFloat(stream.Duration, 32)
 			if !(int(gotDuration) > want) {

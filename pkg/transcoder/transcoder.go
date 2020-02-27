@@ -16,7 +16,6 @@
 package transcoder
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -81,12 +80,6 @@ func DurationInParts(d float64) string {
 
 // PreviewAudioFile creates a preview of an audio file
 func PreviewAudioFile(start, end int, contentPath, destinationPath string, image ...string) (*transcoder.Transcoder, error) {
-	// extension := filepath.Ext(contentPath)
-	// base := filepath.Base(contentPath)
-	// name := base[0 : len(base)-len(extension)]
-	if _, err := os.Stat(destinationPath); !os.IsNotExist(err) {
-		return nil, errors.New(destinationPath + " already exists")
-	}
 	tf := new(transcoder.Transcoder)
 
 	// Initialize transcoder passing the input file path and output file path
@@ -116,9 +109,6 @@ func PreviewAudioFile(start, end int, contentPath, destinationPath string, image
 
 // TranscodeFile transcode a file to another format
 func TranscodeFile(contentPath, destinationPath string) (*transcoder.Transcoder, error) {
-	if _, err := os.Stat(destinationPath); !os.IsNotExist(err) {
-		return nil, errors.New(destinationPath + " already exists")
-	}
 	tf, err := transcodeFile(contentPath, destinationPath)
 	return tf, err
 }
